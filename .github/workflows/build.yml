@@ -5,7 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: unzip -q WordCards-android.zip
+        with:
+          fetch-depth: 0
+      - name: Unpack newest zip
+        run: |
+          f=$(git log --name-only --diff-filter=AM --pretty=format: -- '*.zip' | grep -m1 '\.zip$')
+          echo "Using: $f"
+          unzip -q "$f"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
